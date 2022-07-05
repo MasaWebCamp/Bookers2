@@ -2,17 +2,17 @@ class BooksController < ApplicationController
 
   def create
     @book = Book.new(book_params)
-    respond_to do |format|
     if @book.save
-      format.html {redirect_to @book, notice: 'Book was successfully created.'}
-      format.json {render :show, status: :created, location: @book}
+      flash[:notice] = "Book was successfully created"
+      redirect_to book_path(@book.id)
     else
-      format.html {render :index}
-    end
+      @books = Book.all
+      render :index
     end
   end
 
   def index
+    @book = Book.new
     @books = Book.all
   end
 
@@ -31,7 +31,8 @@ class BooksController < ApplicationController
       format.html {redirect_to @book, notice: 'Book was successfully updated.'}
       format.json {render :show, status: :updated, location: @book}
     else
-      format html {render :edit}
+      @books = Book.all
+      format.html {render :edit}
     end
     end
   end
@@ -44,6 +45,6 @@ class BooksController < ApplicationController
 
   private
   def book_params
-    params.permit(:title, :body)
+    params.required(:book).permit(:title, :body)
   end
 end
