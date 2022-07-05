@@ -26,14 +26,12 @@ class BooksController < ApplicationController
 
   def update
     @book = Book.find(params[:id])
-    respond_to do |format|
     if @book.update(book_params)
-      format.html {redirect_to @book, notice: 'Book was successfully updated.'}
-      format.json {render :show, status: :updated, location: @book}
+      flash[:notice] = "Book was successfully updated"
+      redirect_to book_path(@book.id)
     else
       @books = Book.all
-      format.html {render :edit}
-    end
+      render :edit
     end
   end
 
